@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Марьяны 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@400;600;700&family=Montserrat:wght@300;400;600&family=Marck+Script&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: #1a1410;
+    font-family: 'Montserrat', sans-serif;
+    color: #f5e6d3;
+    overflow-x: hidden;
+  }
+
+  /* ФОН */
+  .bg {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, #2a1f18 0%, #0f0a08 100%);
+    z-index: -2;
+  }
+
+  /* ЗВЁЗДЫ НА ФОНЕ */
+  .stars-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.1; }
+    50% { opacity: 0.8; }
+  }
+
+  .stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: opacity 0.8s ease;
+  }
+  .stage.hidden { display: none; }
+
+  /* КОНВЕРТ */
+  .envelope-wrap {
+    perspective: 1200px;
+    cursor: pointer;
+  }
+  .envelope {
+    width: 340px;
+    height: 220px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: floatEnv 4s ease-in-out infinite;
+  }
+  @keyframes floatEnv {
+    0%,100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-12px) rotate(1deg); }
+  }
+
+  .env-body {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b8 100%);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(180deg, #e8d5b8 0%, #d4bf9e 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-radius: 8px 8px 0 0;
+    transform-origin: top center;
+    transition: transform 0.8s cubic-bezier(0.6, 0, 0.4, 1);
+    z-index: 3;
+  }
+  .envelope-wrap.opened .env-flap {
+    transform: rotateX(180deg);
+  }
+
+  .seal {
+    position: absolute;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle at 30% 30%, #c41e3a, #8b0000);
+    border-radius: 50%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f5e6d3;
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+    box-shadow: 0 4px 15px rgba(196,30,58,0.6);
+    transition: all 0.6s ease;
+  }
+  .envelope-wrap.opened .seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(180deg);
+  }
+
+  .env-name {
+    position: absolute;
+    bottom: 25px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 32px;
+    color: #5a3a28;
+  }
+
+  .hint {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #a89080;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* ПИСЬМО */
+  .paper {
+    max-width: 750px;
+    width: 100%;
+    background: linear-gradient(135deg, #f5e6d3 0%, #ede0c8 100%);
+    border-radius: 4px;
+    padding: 70px 60px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    color: #3a2818;
+    position: relative;
+    margin: 40px 0;
+  }
+
+  .paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 34px, rgba(139,90,60,0.08) 35px);
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  .paper-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4rem;
+    color: #8b3a3a;
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: inkIn 1.5s forwards;
+  }
+
+  .paper-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    line-height: 1.9;
+    white-space: pre-line;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ink-line {
+    opacity: 0;
+    animation: inkIn 1.2s forwards;
+  }
+  @keyframes inkIn {
+    from { opacity: 0; filter: blur(8px); transform: translateY(8px); }
+    to { opacity: 1; filter: blur(0); transform: translateY(0); }
+  }
+
+  .paper-sign {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.8rem;
+    color: #8b3a3a;
+    text-align: right;
+    margin-top: 50px;
+    opacity: 0;
+    animation: inkIn 1.5s 4s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ПОЛАРОИДЫ */
+  .polaroids {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 50px 0;
+  }
+  .polaroid {
+    background: #fff;
+    padding: 14px 14px 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transform: rotate(-3deg);
+    transition: transform 0.4s, box-shadow 0.4s;
+    max-width: 220px;
+  }
+  .polaroid:nth-child(2) { transform: rotate(2deg); }
+  .polaroid:nth-child(3) { transform: rotate(-1deg); }
+  .polaroid:hover {
+    transform: rotate(0) scale(1.08);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  .polaroid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #ddd;
+    display: block;
+  }
+  .polaroid .caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: #3a2818;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* ФИНАЛ */
+  .final {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .final-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: #ff8fa3;
+    margin-bottom: 50px;
+    text-shadow: 0 0 40px rgba(255,77,109,0.6);
+    opacity: 0;
+    animation: inkIn 1.5s forwards;
+  }
+
+  .heart-canvas {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1;
+    border-radius: 16px;
+    background: #0f0a08;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(255,77,109,0.3);
+  }
+
+  .heart-count {
+    margin-top: 25px;
+    font-size: 1rem;
+    color: #ff8fa3;
+    letter-spacing: 3px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+
+  .btn {
+    padding: 16px 36px;
+    background: linear-gradient(135deg, #c41e3a, #8b0000);
+    color: #f5e6d3;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(196,30,58,0.4);
+  }
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(196,30,58,0.6);
+  }
+  .btn.ghost {
+    background: transparent;
+    border: 2px solid #c41e3a;
+    color: #c41e3a;
+    box-shadow: none;
+  }
+
+  /* ПЛАВАЮЩИЕ СЕРДЕЧКИ */
+  .float-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .fh {
+    position: absolute;
+    animation: floatUp linear forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .paper { padding: 40px 25px; }
+    .paper-title { font-size: 2.8rem; }
+    .paper-text { font-size: 1.3rem; }
+    .envelope { width: 280px; height: 180px; }
+    .final-title { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="stars-bg" id="starsBg"></div>
+<div class="float-hearts" id="floatHearts"></div>
+
+<!-- ЭТАП 1: КОНВЕРТ -->
+<div class="stage" id="stageEnv">
+  <div>
+    <div class="envelope-wrap" id="envelopeWrap" onclick="openEnvelope()">
+      <div class="envelope">
+        <div class="env-body"></div>
+        <div class="env-flap"></div>
+        <div class="seal">❤</div>
+        <div class="env-name">Марьяна</div>
+      </div>
+    </div>
+    <div class="hint">НАЖМИ НА КОНВЕРТ</div>
+  </div>
+</div>
+
+<!-- ЭТАП 2: ПИСЬМО -->
+<div class="stage hidden" id="stageLetter">
+  <div>
+    <div class="paper">
+      <h1 class="paper-title">Марьяна</h1>
+      <div class="paper-text" id="letterText"></div>
+      <div class="paper-sign">Твой навсегда ❤</div>
+    </div>
+
+    <div class="polaroids">
+      <div class="polaroid">
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400" alt="Фото">
+        <div class="caption">наша встреча в Roblox</div>
+      </div>
+      <div class="polaroid">
+        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" alt="Фото">
+        <div class="caption">твоя улыбка</div>
+      </div>
+      <div class="polaroid">
+        <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400" alt="Фото">
+        <div class="caption">навсегда вместе</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="showFinal()">Дальше 💌</button>
+    </div>
+  </div>
+</div>
+
+<!-- ЭТАП 3: ФИНАЛ -->
+<div class="stage hidden" id="stageFinal">
+  <div class="final">
+    <h1 class="final-title">Марьяна — моё сердце</h1>
+    <canvas class="heart-canvas" id="heartCanvas" width="500" height="500"></canvas>
+    <div class="heart-count">собрано из <span id="heartCount">0</span> сердечек</div>
+
+    <div class="actions">
+      <button class="btn" onclick="saveOpen()">Сохранить себе 💾</button>
+      <button class="btn ghost" onclick="location.reload()">Сначала</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* БОЛЬШОЙ ТЕКСТ ПИСЬМА */
+  const LETTER_LINES = [
+    "Марьяна, любимая моя,",
+    "",
+    "Я пишу это письмо, чтобы сказать тебе то, что, возможно, не всегда говорю вслух.",
+    "",
+    "Я до сих пор помню тот день, когда мы впервые встретились в Roblox.",
+    "Мы были просто соседями по игре. Обычные игроки, которые даже не думали,",
+    "что их случайная встреча что-то изменит.",
+    "",
+    "Но она изменила всё.",
+    "",
+    "Я не думал, что буду любить тебя так сильно.",
+    "Не думал, что каждый день буду ждать твоего сообщения,",
+    "что твоя улыбка станет для меня самым важным на свете,",
+    "а твой голос — самой любимой музыкой.",
+    "",
+    "Но это случилось. И я счастлив, что это случилось именно с тобой.",
+    "",
+    "Спасибо тебе за то, что ты всегда рядом.",
+    "Даже когда у меня всё хорошо — ты рядом.",
+    "Даже когда у меня всё плохо — ты всё равно рядом.",
+    "Ты не уходишь. Ты не бросаешь. Ты просто есть.",
+    "И это самое дорогое, что у меня есть.",
+    "",
+    "Бывают дни, когда мне тяжело. Когда всё валится из рук.",
+    "И в такие моменты я вспоминаю о тебе — и становится легче.",
+    "Потому что ты — моя опора. Моя тихая гавань.",
+    "Моё самое тёплое место на земле.",
+    "",
+    "Я очень рад, что мы встретились.",
+    "Я очень рад, что это была именно ты.",
+    "Я очень рад, что ты — моя.",
+    "",
+    "Ты — человек, рядом с которым я хочу быть всегда.",
+    "Не на день. Не на год. А на всю жизнь.",
+    "",
+    "Я люблю тебя. Больше, чем могу выразить словами.",
+    "Больше, чем помещается в это письмо."
+  ];
+
+  /* ЗВЁЗДЫ НА ФОНЕ */
+  const starsBg = document.getElementById('starsBg');
+  for (let i = 0; i < 120; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    starsBg.appendChild(star);
+  }
+
+  /* ОТКРЫТИЕ КОНВЕРТА */
+  function openEnvelope() {
+    const wrap = document.getElementById('envelopeWrap');
+    if (wrap.classList.contains('opened')) return;
+    wrap.classList.add('opened');
+    burstHearts();
+
+    setTimeout(() => {
+      document.getElementById('stageEnv').classList.add('hidden');
+      document.getElementById('stageLetter').classList.remove('hidden');
+      typeLetter();
+      window.scrollTo(0, 0);
+    }, 1200);
+  }
+
+  /* ПРОЯВЛЕНИЕ ЧЕРНИЛ */
+  function typeLetter() {
+    const container = document.getElementById('letterText');
+    container.innerHTML = '';
+    LETTER_LINES.forEach((line, i) => {
+      const div = document.createElement('div');
+      div.className = 'ink-line';
+      div.style.animationDelay = (i * 0.25) + 's';
+      div.textContent = line || '\u00A0';
+      container.appendChild(div);
+    });
+  }
+
+  /* ФИНАЛ */
+  function showFinal() {
+    document.getElementById('stageLetter').classList.add('hidden');
+    document.getElementById('stageFinal').classList.remove('hidden');
+    burstHearts();
+    drawHeartPortrait();
+    window.scrollTo(0, 0);
+  }
+
+  /* ПОРТРЕТ ИЗ СЕРДЕЧЕК */
+  function drawHeartPortrait() {
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = '#0f0a08';
+    ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2, cy = H / 2;
+    let count = 0;
+    const TOTAL = 5000;
+    const colors = ['#ff4d6d', '#ff8fa3', '#c41e3a', '#ffb3c1', '#8b0000', '#ff6b8a'];
+
+    function drawHeart(x, y, size, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x, y + size * 0.3);
+      ctx.bezierCurveTo(x, y, x - size * 0.5, y, x - size * 0.5, y + size * 0.3);
+      ctx.bezierCurveTo(x - size * 0.5, y + size * 0.6, x, y + size * 0.9, x, y + size * 1.1);
+      ctx.bezierCurveTo(x, y + size * 0.9, x + size * 0.5, y + size * 0.6, x + size * 0.5, y + size * 0.3);
+      ctx.bezierCurveTo(x + size * 0.5, y, x, y, x, y + size * 0.3);
+      ctx.fill();
+      count++;
+    }
+
+    function heartPoint(t) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+      return { x: cx + x * (W / 42), y: cy + y * (H / 42) };
+    }
+
+    const interval = setInterval(() => {
+      for (let i = 0; i < 40; i++) {
+        const t = Math.random() * Math.PI * 2;
+        const p = heartPoint(t);
+        const jitterX = (Math.random() - 0.5) * 35;
+        const jitterY = (Math.random() - 0.5) * 35;
+        const size = 3 + Math.random() * 6;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        drawHeart(p.x + jitterX, p.y + jitterY, size, color);
+      }
+      document.getElementById('heartCount').textContent = count;
+      if (count >= TOTAL) clearInterval(interval);
+    }, 25);
+  }
+
+  /* ВЗРЫВ СЕРДЕЧЕК */
+  function burstHearts() {
+    const container = document.getElementById('floatHearts');
+    const symbols = ['❤️', '💖', '💕', '💗', '💓', '💘', '💝', '💞'];
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => {
+        const h = document.createElement('div');
+        h.className = 'fh';
+        h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        h.style.left = Math.random() * 100 + '%';
+        h.style.fontSize = (Math.random() * 25 + 15) + 'px';
+        h.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        container.appendChild(h);
+        setTimeout(() => h.remove(), 8000);
+      }, i * 60);
+    }
+  }
+
+  /* СОХРАНИТЬ КАРТИНКУ */
+  function saveOpen() {
+    const canvas = document.getElementById('heartCanvas');
+    const link = document.createElement('a');
+    link.download = 'для-марьяны.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+</script>
+</body>
+</html>
